@@ -99,7 +99,8 @@ const forgotPassword = async (email: string) => {
     }
 
     const resetToken = jwt.sign(jwtPayload, envVars.JWT_ACCESS_SECRET, {
-        expiresIn: "10m"
+        expiresIn: "10m",
+        
     })
 
     const resetUILink = `${envVars.FRONTEND_URL}/reset-password?id=${isUserExist._id}&token=${resetToken}`

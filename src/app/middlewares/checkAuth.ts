@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status-codes";
 import { JwtPayload } from "jsonwebtoken";
@@ -10,7 +11,17 @@ import { verifyToken } from "../utils/jwt";
 export const checkAuth = (...authRoles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
 
     try {
-        const accessToken = req.headers.authorization;
+         const cookieToken =
+           (req as any).cookies?.accessToken || req.cookies?.accessToken;
+
+         // 2) fallback to Authorization header (e.g. 'Bearer <token>')
+         const header = req.headers.authorization;
+         const headerToken = header
+           ? header.replace(/^Bearer\s+/i, "")
+           : undefined;
+
+         const accessToken = cookieToken || headerToken;
+   
 
         if (!accessToken) {
             throw new AppError(403, "No Token Recieved")
