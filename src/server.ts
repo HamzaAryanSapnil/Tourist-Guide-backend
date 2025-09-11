@@ -15,8 +15,10 @@ const startServer = async () => {
 
         console.log("Connected to DB!!");
 
-        server = app.listen(envVars.PORT, () => {
-            console.log(`Server is listening to port ${envVars.PORT}`);
+        server = app.listen(envVars.PORT, async () => {
+          if (envVars.NODE_ENV === "development") {
+            console.log(`server is listening on port ${envVars.PORT}`);
+          }
         });
     } catch (error) {
         console.log(error);
